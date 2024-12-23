@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34018.315
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenderingPipelineLab", "RenderingPipelineLab.csproj", "{C0FC4BF1-7B27-4CC0-BBDA-9696A9FCD5C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RenderingPipelineLab", "RenderingPipelineLab.csproj", "{C0FC4BF1-7B27-4CC0-BBDA-9696A9FCD5C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenderingPipelineLab.Tests", "RenderingPipelineLab.Tests\RenderingPipelineLab.Tests.csproj", "{E43B3318-10EE-4817-B51F-ED7AC1E4ECB3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{C0FC4BF1-7B27-4CC0-BBDA-9696A9FCD5C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0FC4BF1-7B27-4CC0-BBDA-9696A9FCD5C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0FC4BF1-7B27-4CC0-BBDA-9696A9FCD5C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E43B3318-10EE-4817-B51F-ED7AC1E4ECB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E43B3318-10EE-4817-B51F-ED7AC1E4ECB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E43B3318-10EE-4817-B51F-ED7AC1E4ECB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E43B3318-10EE-4817-B51F-ED7AC1E4ECB3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

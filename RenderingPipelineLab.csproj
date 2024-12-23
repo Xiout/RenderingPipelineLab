@@ -7,4 +7,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="RenderingPipelineLab.Tests\**" />
+    <EmbeddedResource Remove="RenderingPipelineLab.Tests\**" />
+    <None Remove="RenderingPipelineLab.Tests\**" />
+  </ItemGroup>
+
 </Project>
