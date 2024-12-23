@@ -8,6 +8,14 @@ namespace RenderingPipelineLab
 {
     public class Vector3D
     {
+        //---Static properties
+
+        /// <summary>
+        /// Vector wich all coordinates are equal to zero
+        /// </summary>
+        public static readonly Vector3D Zero = new Vector3D(0.0f, 0.0f, 0.0f);
+
+        //---Members & Properties---
         private float[] _coord;
 
         public float X
@@ -28,11 +36,26 @@ namespace RenderingPipelineLab
             private set { _coord[2] = value; }
         }
 
+        /// <summary>
+        /// Lenght of the vector
+        /// </summary>
         public float Magnitude { get { return MathF.Sqrt(X*X + Y*Y + Z*Z); } }
 
-        public Vector3D Normalized { get { return new Vector3D(X / Magnitude, Y / Magnitude, Z / Magnitude); } }
+        /// <summary>
+        /// Vector of same direction with magnitude of 1
+        /// </summary>
+        public Vector3D Normalized { 
+            get 
+            {
+                if (this.Equals(Zero))
+                {
+                    return null;
+                }
+                return new Vector3D(X / Magnitude, Y / Magnitude, Z / Magnitude); 
+            } 
+        }
 
-        public static readonly Vector3D Zero = new Vector3D(0, 0, 0);
+        //---Constructors---
 
         public Vector3D(float[] coord)
         {
@@ -45,42 +68,66 @@ namespace RenderingPipelineLab
             _coord = new float[3] { x, y, z };
         }
 
-        public void Add(Vector3D vec)
+        public Vector3D(Vector3D vec)
         {
-            X += vec.X;
-            Y += vec.Y;
-            Z += vec.Z;
+            _coord = new float[3] { vec.X, vec.Y, vec.Z };
         }
 
-        public void Substract(Vector3D vec)
-        {
-            X -= vec.X;
-            Y -= vec.Y;
-            Z -= vec.Z;
-        }
+        //---Methods---
 
-        public void MultiplyScalar (float k)
-        {
-            X *= k; 
-            Y *= k; 
-            Z *= k;
-        }
-
+        /// <summary>
+        /// Verify the orthogonality between this vector and another in parameter
+        /// </summary>
         public bool isOrthogonal(Vector3D vec)
         {
             return DotProduct(this, vec) == 0;
         }
 
+        /// <summary>
+        /// Verify the colinearity between this vector and another in parameter
+        /// </summary>
         public bool isColinear(Vector3D vec)
         {
             return CrossProduct(this, vec).Equals(Vector3D.Zero);
         }
 
+        //---Static Methods---
+
+        /// <summary>
+        /// Return vector which result of the addition of the two vectors in parameter
+        /// </summary>
+        public static Vector3D Add(Vector3D vecA, Vector3D vecB)
+        {
+            return new Vector3D(vecA.X+vecB.X, vecA.Y+vecB.Y, vecA.Z+vecB.Z);
+        }
+
+        /// <summary>
+        /// Return vector which result of the substraction of the two vectors in parameter
+        /// </summary>
+        public static Vector3D Substract(Vector3D vecA, Vector3D vecB)
+        {
+            return new Vector3D(vecA.X - vecB.X, vecA.Y - vecB.Y, vecA.Z - vecB.Z);
+        }
+
+        /// <summary>
+        /// Return vector which result of the multiplication of the vector and a scalar in parameter
+        /// </summary>
+        public static Vector3D MultiplyScalar (Vector3D vec, float k)
+        {
+            return new Vector3D(vec.X*k, vec.Y*k, vec.Z*k);
+        }
+
+        /// <summary>
+        /// Calculate result of the scalar product between two vectors
+        /// </summary>
         public static float DotProduct(Vector3D vecA, Vector3D vecB)
         {
             return vecA.X*vecB.X + vecA.Y*vecB.Y + vecA.Z*vecB.Z;
         }
 
+        /// <summary>
+        /// Return vector resulting of the vector product between two vectors
+        /// </summary>
         public static Vector3D CrossProduct(Vector3D vecA, Vector3D vecB)
         {
             return new Vector3D(
@@ -89,6 +136,8 @@ namespace RenderingPipelineLab
                     vecA.X*vecB.Y - vecA.Y*vecB.X
                 );
         }
+
+        //---Overrides---
 
         public override bool Equals(object? obj)
         {
