@@ -10,8 +10,14 @@ namespace RenderingPipelineLab
 {
     public class Matrix4X4
     {
+        public static readonly Matrix4X4 Identity = new Matrix4X4(1.0f, 0.0f, 0.0f, 0.0f,
+                                                                  0.0f, 1.0f, 0.0f, 0.0f,
+                                                                  0.0f, 0.0f, 1.0f, 0.0f,
+                                                                  0.0f, 0.0f, 0.0f, 1.0f);
+
         private float[] _coord;
 
+        //---Contructors---
         public Matrix4X4(float[] row0, float[] row1, float[] row2, float[] row3)
         {
             if (row0 == null || row0.Length != 4) { throw new ArgumentException($"Parameter row0 should has a lenght of 4 but was {(row0 == null ? "null" : row0.Length.ToString())}"); }
@@ -32,6 +38,14 @@ namespace RenderingPipelineLab
         { 
             if(coord == null || coord.Length != 16) { throw new ArgumentException($"Parameter coord should has a lenght of 16 but was {(coord == null ? "null" : coord.Length.ToString())}"); }
             _coord = coord;
+        }
+
+        private Matrix4X4(float el00, float el01, float el02, float el03,
+                         float el10, float el11, float el12, float el13,
+                         float el20, float el21, float el22, float el23,
+                         float el30, float el31, float el32, float el33)
+        {
+            _coord = new float[16] { el00, el01, el02, el03, el10, el11, el12, el13, el20, el21, el22, el23, el30, el31, el32, el33 };
         }
 
         public float GetElement(int row, int column)
@@ -83,6 +97,65 @@ namespace RenderingPipelineLab
             }
 
             return new Matrix4X4(coord);
+        }
+
+        public static Vector3D ApplyTransformMatrix(Matrix4X4 matTransf, Vector3D vec)
+        {
+            float[] homogeneousCoord = new float[4] { vec.X, vec.Y, vec.Z, 1.0f };
+            float[] result = new float[4];
+
+            for(int row = 0; row < 4; row++)
+            {
+                float element = 0.0f;
+                for (int i = 0; i < 4; i++)
+                {
+                    element += matTransf.GetElement(row, i) * homogeneousCoord[i];
+                }
+
+                result[row] = element;
+            }
+
+            return new Vector3D(result[0] / result[3], result[1] / result[3], result[2] / result[3]);
+        }
+
+        public static Matrix4X4 GetScalingMatrix(Vector3D scalingVector)
+        {
+            return new Matrix4X4( scalingVector.X, 0.0f, 0.0f, 0.0f,
+                              0.0f, scalingVector.Y, 0.0f, 0.0f,
+                              0.0f, 0.0f, scalingVector.Z, 0.0f,
+                              0.0f, 0.0f, 0.0f, 1.0f);
+        }
+
+        public static Matrix4X4 GetTranslateMatrix(Vector3D translateVector)
+        {
+            return new Matrix4X4(1.0f, 0.0f, 0.0f, translateVector.X,
+                                 0.0f, 1.0f, 0.0f, translateVector.Y,
+                                 0.0f, 0.0f, 1.0f, translateVector.Z,
+                                 0.0f, 0.0f, 0.0f, 1.0f);
+        }
+
+        public static Matrix4X4 GetRotationMatrix_XAxis(float theta)
+        {
+            return new Matrix4X4(1.0f, 0.0f, 0.0f, 0.0f,
+                                 0.0f, MathF.Cos(theta), -MathF.Sin(theta), 0.0f,
+                                 0.0f, MathF.Sin(theta), MathF.Cos(theta), 0.0f,
+                                 0.0f, 0.0f, 0.0f, 1.0f);
+        }
+
+        public static Matrix4X4 GetRotationMatrix_YAxis(float theta)
+        {
+            return new Matrix4X4(MathF.Cos(theta), 0.0f, MathF.Sin(theta), 0.0f,
+                                 0.0f, 1.0f, 0.0f, 0.0f,
+                                 -MathF.Sin(theta), 0.0f, MathF.Cos(theta), 0.0f,
+                                 0.0f, 0.0f, 0.0f, 1.0f);
+        }
+
+        public static Matrix4X4 GetRotationMatrix_ZAxis(float theta)
+        {
+            return new Matrix4X4(MathF.Cos(theta), -MathF.Sin(theta), 0.0f, 0.0f,
+                                 MathF.Sin(theta), MathF.Cos(theta), 0.0f, 0.0f,
+                                 0.0f, 0.0f, 1.0f, 0.0f,
+                                 0.0f, 0.0f, 0.0f, 1.0f);
         }
     }
 }
