@@ -100,5 +100,95 @@ namespace RenderingPipelineLab.Tests
 
             Assert.IsTrue(isEqual, sb.ToString());
         }
+
+        [TestCase(1.0f, 2.0f, 3.0f, 5.0f, -3.0f, 2.0f, 6.0f, -1.0f, 5.0f)]
+        [TestCase(-4.0f, 7.0f, 1.0f, 0.0f, 0.0f, 0.0f, -4.0f, 7.0f, 1.0f)]
+        [TestCase(0.0f, 0.0f, 0.0f, 10.0f, 20.0f, 30.0f, 10.0f, 20.0f, 30.0f)]
+        [TestCase(3.0f, -5.0f, 8.0f, -3.0f, 3.0f, -8.0f, 0.0f, -2.0f, 0.0f)]
+        [TestCase(-1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f)]
+        [TestCase(10.0f, 5.0f, -3.0f, -10.0f, -5.0f, 3.0f, 0.0f, 0.0f, 0.0f)]
+        public void Test_Translation(float vecAx, float vecAy, float vecAz,
+                                  float tx, float ty, float tz,
+                                  float expX, float expY, float expZ)
+        {
+            // Arrange
+            Vector3D vecA = new Vector3D(vecAx, vecAy, vecAz);
+            Vector3D vecT = new Vector3D(tx, ty, tz);
+            Matrix4X4 matT = Matrix4X4.GetTranslateMatrix(vecT);
+            Vector3D expectedResult = new Vector3D(expX, expY, expZ);
+
+            // Act 
+            Vector3D result = Matrix4X4.ApplyTransformMatrix(matT, vecA);
+
+            Assert.AreEqual(expectedResult, result, $"Expected: ({expX},{expY},{expZ}) But was: ({result.X},{result.Y},{result.Z})");
+        }
+
+        [TestCase(1.0f, 2.0f, 3.0f, 2.0f, -3.0f, 0.5f, 2.0f, -6.0f, 1.5f)]
+        [TestCase(0.0f, 0.0f, 0.0f, 10.0f, 20.0f, 30.0f, 0.0f, 0.0f, 0.0f)]
+        [TestCase(-1.0f, -1.0f, -1.0f, -2.0f, 3.0f, 4.0f, 2.0f, -3.0f, -4.0f)]
+        [TestCase(10.0f, -5.0f, 2.0f, 0.1f, 2.0f, -3.0f, 1.0f, -10.0f, -6.0f)]
+        [TestCase(3.0f, 7.0f, -9.0f, 1.0f, 0.0f, -1.0f, 3.0f, 0.0f, 9.0f)]
+        [TestCase(4.5f, 6.2f, -3.1f, 0.0f, 1.0f, -0.5f, 0.0f, 6.2f, 1.55f)]
+        public void Test_Scaling(float vecAx, float vecAy, float vecAz,
+                                  float sx, float sy, float sz,
+                                  float expX, float expY, float expZ)
+        {
+            // Arrange
+            Vector3D vecA = new Vector3D(vecAx, vecAy, vecAz);
+            Vector3D vecS = new Vector3D(sx, sy, sz);
+            Matrix4X4 matS = Matrix4X4.GetScalingMatrix(vecS);
+            Vector3D expectedResult = new Vector3D(expX, expY, expZ);
+
+            // Act 
+            Vector3D result = Matrix4X4.ApplyTransformMatrix(matS, vecA);
+
+            Assert.AreEqual(expectedResult, result, $"Expected: ({expX},{expY},{expZ}) But was: ({result.X},{result.Y},{result.Z})");
+        }
+
+        [TestCase(0.0f, 1.0f, 0.0f, MathF.PI/2.0f, 0.0f, 0.0f, 1.0f)]
+        [TestCase(1.0f, 2.0f, 3.0f, MathF.PI/4.0f, 1.0f, 0.7071f, 3.5355f)]
+        public void Test_RotationX(float vecAx, float vecAy, float vecAz, float angle, float expX, float expY, float expZ)
+        {
+            // Arrange
+            Vector3D vecA = new Vector3D(vecAx, vecAy, vecAz);
+            Matrix4X4 matRx = Matrix4X4.GetRotationMatrix_XAxis(angle);
+            Vector3D expectedResult = new Vector3D(expX, expY, expZ);
+
+            // Act 
+            Vector3D result = Matrix4X4.ApplyTransformMatrix(matRx, vecA);
+
+            Assert.AreEqual(expectedResult, result, $"Expected: ({expX},{expY},{expZ}) But was: ({result.X},{result.Y},{result.Z})");
+        }
+
+        [TestCase(1.0f, 0.0f, 0.0f, MathF.PI/2.0f, 0.0f, 0.0f, -1.0f)]
+        [TestCase(3.0f, 2.0f, 1.0f, MathF.PI/6.0f, 2.5981f, 2.0f, -0.2321f)]
+        public void Test_RotationY(float vecAx, float vecAy, float vecAz, float angle, float expX, float expY, float expZ)
+        {
+            // Arrange
+            Vector3D vecA = new Vector3D(vecAx, vecAy, vecAz);
+            Matrix4X4 matRy = Matrix4X4.GetRotationMatrix_YAxis(angle);
+            Vector3D expectedResult = new Vector3D(expX, expY, expZ);
+
+            // Act 
+            Vector3D result = Matrix4X4.ApplyTransformMatrix(matRy, vecA);
+
+            Assert.AreEqual(expectedResult, result, $"Expected: ({expX},{expY},{expZ}) But was: ({result.X},{result.Y},{result.Z})");
+        }
+
+        [TestCase(1.0f, 0.0f, 0.0f, MathF.PI/2.0f, 0.0f, 1.0f, 0.0f)]
+        [TestCase(1.0f, 2.0f, 3.0f, MathF.PI/3.0f, -0.7321f, 2.5981f, 3.0f)]
+        public void Test_RotationZ(float vecAx, float vecAy, float vecAz, float angle, float expX, float expY, float expZ)
+        {
+            // Arrange
+            Vector3D vecA = new Vector3D(vecAx, vecAy, vecAz);
+            Matrix4X4 matRz = Matrix4X4.GetRotationMatrix_ZAxis(angle);
+            Vector3D expectedResult = new Vector3D(expX, expY, expZ);
+
+            // Act 
+            Vector3D result = Matrix4X4.ApplyTransformMatrix(matRz, vecA);
+
+            Assert.AreEqual(expectedResult, result, $"Expected: ({expX},{expY},{expZ}) But was: ({result.X},{result.Y},{result.Z})");
+        }
+
     }
 }
